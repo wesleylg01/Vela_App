@@ -1,0 +1,22 @@
+{
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-admobpro": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-admobpro@^2.49.0"
+    },
+    "is_top_level": true,
+    "variables": {
+      "PLAY_SERVICES_VERSION": "16.0.0",
+      "ADMOB_ANDROID_APP_ID": "ca-app-pub-9356592143804848~4502100299",
+      "ADMOB_IOS_APP_ID": "__your_admob_ios_app_id___"
+    }
+  }
+}
