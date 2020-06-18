@@ -1,143 +1,288 @@
 <!DOCTYPE html>
-<html class="no-js" lang="pt_br">
+<html>
 <head>
+<meta charset="utf-8" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="format-detection" content="telephone=no" />
 
-    <!--- basic page needs
-    ================================================== -->
-    <meta charset="utf-8">
-    <title>Transcend</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!-- to avoid the warning of content security policy -->
+<meta http-equiv="Content-Security-Policy" content="default-src * gap://ready file:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src * 'unsafe-inline' 'unsafe-eval'">
 
-    <!-- mobile specific metas
-    ================================================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hello World</title>
+<script>
+  // fix wp8 view port issue, see:
+  // https://github.com/floatinghotpot/cordova-admob-pro/issues/109
+  // https://coderwall.com/p/zk_2la/responsive-design-in-ie-10-on-windows-phone-8
+  // http://stackoverflow.com/questions/24007577/windows-phone-8-viewport-issue
+(function() {
+  if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+    var msViewportStyle = document.createElement("style");
+    msViewportStyle.appendChild(
+      document.createTextNode("@-ms-viewport{width:auto!important}")
+    );
+    document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+  }
+})();
+</script>
 
-    <!-- CSS
-    ================================================== -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/vendor.css">
-    <link rel="stylesheet" href="css/main.css">
+<!-- optional -->
+<script type="text/javascript" src="jquery-1.9.js"></script>
 
-    <!-- script
-    ================================================== -->
-    <script src="js/modernizr.js"></script>
-    <script src="js/pace.min.js"></script>
+<!-- must-have, which will be created by cordova prepare/build -->
+<script type="text/javascript" src="cordova.js"></script>
 
-    <!-- favicons
-    ================================================== -->
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+<style type="text/css">
+body {
+width: 100%;
+height: 100%;
+margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: gray;
+  color: white;
+}
 
+div#fullpage {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0px solid red;
+  text-align: center;
+  vertical-align: middle;
+}
+
+select, textarea {
+  width: calc(100% - 20px);
+  padding: 0px;
+  margin: 5px;
+}
+
+button {
+  width: calc(50% - 40px);
+  padding: 10px;
+  margin: 5px;
+}
+
+</style>
 </head>
 
-<body id="top">
+<body>
+<script>
+  // place our admob ad unit id here
+  var admobid = {};
+  if( /(android)/i.test(navigator.userAgent) ) {
+    admobid = { // for Android
+      banner: 'ca-app-pub-3940256099942544/6300978111',
+      interstitial: 'ca-app-pub-3940256099942544/1033173712',
+      rewardvideo: 'ca-app-pub-3940256099942544/5224354917',
+    };
+  } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+    admobid = { // for iOS
+      banner: 'ca-app-pub-3940256099942544/2934735716',
+      interstitial: 'ca-app-pub-3940256099942544/4411468910',
+      rewardvideo: 'ca-app-pub-3940256099942544/1712485313',
+    };
+  } else {
+    admobid = { // for Windows Phone, deprecated
+      banner: '',
+      interstitial: '',
+      rewardvideo: '',
+    };
+  }
 
-    <!-- header
-    ================================================== -->
-    <header class="s-header">
+  function createSelectedBanner(){
+    if(AdMob) AdMob.createBanner({
+      adId: admobid.banner,
+      overlap: $('#overlap').is(':checked'),
+      offsetTopBar: $('#offsetTopBar').is(':checked'),
+      adSize: $('#adSize').val(),
+      position: $('#adPosition').val(),
+    });
+  }
 
-        <div class="header-logo">
-            <a class="site-logo" href="index.html">
-                <img src="img/logo.png" alt="Homepage">
-            </a>
-        </div> <!-- end header-logo -->
+  function showBannerAtPosition(){
+    if(AdMob) AdMob.showBanner( $('#adPosition').val() );
+  }
 
-        <nav class="header-nav">
+  function onDeviceReady() {
+    if (! AdMob) { alert( 'admob plugin not ready' ); return; }
 
-            <a href="#0" class="header-nav__close" title="close"><span>Close</span></a>
+    initAd();
 
-            <div class="header-nav__content">
-                <h3>Vela para Meditação</h3>
-                
-                <ul class="header-nav__list">
-                    <li class="current"><a class="smoothscroll" onclick="GetVela(1)" href="#home" >Vela 1</a></li>
-                    <li><a class="smoothscroll"  onclick="GetVela(2)" href="#home" >Vela 2</a></li>
-                    <li><a class="smoothscroll"  onclick="GetVela(3)" href="#home" >Vela 3</a></li>
-                </ul>
-    
-                <p>Desenvolvido por <a href='http://wgltec.com.br/'>WGL - TECNOLOGIA</a> Entre em contato: wesleylg01@gmail.com.</p>
-                
-                <!-- 
-                <ul class="header-nav__social">
-                    <li>
-                        <a href="#0"><i class="fab fa-facebook"></i></a>
-                    </li>
-                    <li>
-                        <a href="#0"><i class="fab fa-twitter"></i></a>
-                    </li>
-                    <li>
-                        <a href="#0"><i class="fab fa-instagram"></i></a>
-                    </li>
-                    <li>
-                        <a href="#0"><i class="fab fa-behance"></i></a>
-                    </li>
-                    <li>
-                        <a href="#0"><i class="fab fa-dribbble"></i></a>
-                    </li>
-                </ul>
-                -->
-            </div> <!-- end header-nav__content -->
+    // display a banner at startup
+    createSelectedBanner();
+  }
 
-        </nav> <!-- end header-nav -->
-        <div class="vela">
-            <img src="img/calma.gif" id="vela" alt="" srcset="">
-        </div>
-        <a class="header-menu-toggle" href="#0">
-            <span class="header-menu-icon"></span>
-        </a>
+  function initAd(){
+    AdMob.getAdSettings(function(info){
+      console.log('adId: ' + info.adId + '\n' + 'adTrackingEnabled: ' + info.adTrackingEnabled);
+    }, function(){
+      console.log('failed to get user ad settings');
+    });
 
-    </header> <!-- end s-header -->
+    AdMob.setOptions({
+      // adSize: 'SMART_BANNER',
+      position: AdMob.AD_POSITION.BOTTOM_CENTER,
+      isTesting: true, // set to true, to receiving test ad for testing purpose
+      bgColor: 'black', // color name, or '#RRGGBB'
+      // autoShow: true // auto show interstitial ad when loaded, set to false if prepare/show
+      // offsetTopBar: false, // avoid overlapped by status bar, for iOS7+
+    });
 
+    // new events, with variable to differentiate: adNetwork, adType, adEvent
+    $(document).on('onAdFailLoad', function(e){
+      // when jquery used, it will hijack the event, so we have to get data from original event
+      if(typeof e.originalEvent !== 'undefined') e = e.originalEvent;
+      var data = e.detail || e.data || e;
 
-    <!-- home
-    ================================================== -->
-    <section id="home" class="s-home target-section" data-parallax="scroll" >
+      alert('error: ' + data.error +
+          ', reason: ' + data.reason +
+          ', adNetwork:' + data.adNetwork +
+          ', adType:' + data.adType +
+          ', adEvent:' + data.adEvent); // adType: 'banner', 'interstitial', etc.
+    });
+    $(document).on('onAdLoaded', function(e){
+        if(typeof e.originalEvent !== 'undefined') e = e.originalEvent;
+        var data = e.data || e;
 
-        <div class="shadow-overlay"></div>
+        if(data.adType === 'interstitial') {
+            $('#h3_full').text('Interstitial Ready');
+            $('#btn_showfull').prop('disabled', false);
 
-        <div class="home-content">
-
-
-        </div> <!-- end home-content -->
-
-        <ul class="home-sidelinks">
-            <li><a class="smoothscroll" href="#about">About<span>who we are</span></a></li>
-            <li><a class="smoothscroll" href="#services">Services<span>what we do</span></a></li>
-            <li><a  class="smoothscroll" href="#contact">Contact<span>get in touch</span></a></li>
-        </ul> <!-- end home-sidelinks -->
-
-
-    </section> <!-- end s-home -->
-
-
-
-    <!-- Java Script
-    ================================================== -->
-    <script src="js/ChangeImage.js"></script>
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-        // select the right Ad Id according to platform
-        var admobid = {};
-        if( /(android)/i.test(navigator.userAgent) ) { // for android & amazon-fireos
-            admobid = {
-            banner: 'ca-app-pub-9356592143804848/2144079005', // or DFP format "/6253334/dfp_example_ad"
-            interstitial: 'ca-app-pub-9356592143804848/3204458354'
-            };
-        } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) { // for ios
-            admobid = {
-            banner: 'ca-app-pub-xxx/zzz', // or DFP format "/6253334/dfp_example_ad"
-            interstitial: 'ca-app-pub-xxx/kkk'
-            };
-        } else { // for windows phone
-            admobid = {
-            banner: 'ca-app-pub-xxx/zzz', // or DFP format "/6253334/dfp_example_ad"
-            interstitial: 'ca-app-pub-xxx/kkk'
-            };
+        } else if(data.adType === 'rewardvideo') {
+            $('#h3_video').text('Rewarded Video Ready');
+            $('#btn_showvideo').prop('disabled', false);
         }
-    </script>
-</body>
+    });
+    $(document).on('onAdPresent', function(e){
+    });
+    $(document).on('onAdLeaveApp', function(e){
+    });
+    $(document).on('onAdDismiss', function(e){
+        if(typeof e.originalEvent !== 'undefined') e = e.originalEvent;
+        var data = e.data || e;
 
+        if(data.adType === 'interstitial') {
+            $('#h3_full').text('Interstitial');
+            $('#btn_showfull').prop('disabled', true);
+
+        } else if(data.adType === 'rewardvideo') {
+            $('#h3_video').text('Rewarded Video');
+            $('#btn_showvideo').prop('disabled', true);
+        }
+    });
+
+    $('#btn_create').click(createSelectedBanner);
+    $('#btn_remove').click(function(){
+      AdMob.removeBanner();
+    });
+
+    $('#btn_show').click(showBannerAtPosition);
+    $('#btn_hide').click(function(){
+      AdMob.hideBanner();
+    });
+
+    // test interstitial ad
+    $('#btn_prepare').click(function(){
+      AdMob.prepareInterstitial({
+        adId:admobid.interstitial,
+        autoShow: $('#autoshow').is(':checked'),
+      });
+    });
+
+    $('#btn_showfull').click(function(){
+      AdMob.showInterstitial();
+    });
+
+    // test rewarded video ad
+    $('#btn_preparevideo').click(function(){
+      AdMob.prepareRewardVideoAd({
+        adId:admobid.rewardvideo,
+        autoShow: $('#autoshowvideo').is(':checked'),
+      });
+    });
+
+    $('#btn_showvideo').click(function(){
+      AdMob.showRewardVideoAd();
+    });
+
+    // test case for #256, https://github.com/floatinghotpot/cordova-admob-pro/issues/256
+    $(document).on('backbutton', function(){
+      if(window.confirm('Are you sure to quit?')) navigator.app.exitApp();
+    });
+
+    // test case #283, https://github.com/floatinghotpot/cordova-admob-pro/issues/283
+    $(document).on('resume', function(){
+      AdMob.showInterstitial();
+    });
+  }
+
+  // test the webview resized properly
+  $(window).resize(function(){
+    $('#textinfo').html('web view: ' + $(window).width() + " x " + $(window).height());
+  });
+
+  $(document).ready(function(){
+    $('#btn_showfull').prop('disabled', true);
+    $('#btn_showvideo').prop('disabled', true);
+
+    // on mobile device, we must wait the 'deviceready' event fired by cordova
+    if(/(ipad|iphone|ipod|android|windows phone)/i.test(navigator.userAgent)) {
+      document.addEventListener('deviceready', onDeviceReady, false);
+    } else {
+      onDeviceReady();
+    }
+  });
+
+</script>
+  <div id="fullpage">
+    <p>Demo for AdMob Plugin</p>
+    <h3 id='h3_banner'>Banner</h3>
+    <input type='checkbox' id='overlap' />overlap
+    <input type='checkbox' id='offsetTopBar' />offsetTopBar
+    <br/>
+    <select id="adSize">
+      <option value='SMART_BANNER'>SMART_BANNER</option>
+      <option value='BANNER'>BANNER</option>
+      <option value='MEDIUM_RECTANGLE'>MEDIUM_RECTANGLE</option>
+      <option value='FULL_BANNER'>FULL_BANNER</option>
+      <option value='LEADERBOARD'>LEADERBOARD</option>
+      <option value='SKYSCRAPER'>SKYSCRAPER</option>
+    </select><br/>
+    <select id="adPosition">
+      <option value='1'>Top Left</option>
+      <option value='2'>Top Center</option>
+      <option value='3'>Top Right</option>
+      <option value='4'>Left</option>
+      <option value='5'>Center</option>
+      <option value='6'>Right</option>
+      <option value='7'>Bottom Left</option>
+      <option value='8' selected>Bottom Center</option>
+      <option value='9'>Bottom Right</option>
+    </select><br/>
+    <button id='btn_create'>createBanner</button>
+    <button id='btn_remove'>removeBanner</button>
+    <button id='btn_show'>showBanner</button>
+    <button id='btn_hide'>hideBanner</button>
+    <hr />
+
+    <h3 id='h3_full'>Interstitial</h3>
+    <input type='checkbox' id='autoshow' checked />auto show when ready<br />
+    <button id='btn_prepare'>prepareInterstitial</button>
+    <button id='btn_showfull'>showInterstitial</button>
+
+    <h3 id='h3_video'>Rewarded Video</h3>
+    <input type='checkbox' id='autoshowvideo' checked />auto show when ready<br />
+    <button id='btn_preparevideo'>prepareRewardVideoAd</button>
+    <button id='btn_showvideo'>showRewardVideoAd</button>
+
+    <p><textarea rows=4 cols=30 id='textinfo'></textarea></p>
+
+  </div>
+</body>
 </html>
