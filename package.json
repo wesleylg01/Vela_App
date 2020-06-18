@@ -13,20 +13,28 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
+    "cordova-admobsdk": "7.49.0",
     "cordova-android": "^8.1.0",
+    "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.1",
-    "cordova-plugin-admobpro": "^2.49.0"
+    "cordova-plugin-admobpro": "^2.49.0",
+    "cordova-plugin-extension": "1.5.4"
   },
   "devDependencies": {
     "cordova-plugin-whitelist": "^1.3.4"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-admobpro": {
+        "PLAY_SERVICES_VERSION": "16.0.0",
+        "ADMOB_APP_ID": "ca-app-pub-9356592143804848~4502100299"
+      }
     },
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "browser"
     ]
   }
 }

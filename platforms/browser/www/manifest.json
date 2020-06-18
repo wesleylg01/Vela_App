@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Vela MeditaÃ§Ã£o",
+  "short_name": "Vela MeditaÃ§Ã£o",
+  "version": "wgl-release.keystore",
+  "description": "App vela acessa, Ã³timo para meditar, orar e refletir.",
+  "author": "WGL Tecnologia",
+  "icons": [],
+  "start_url": "index.html"
+}

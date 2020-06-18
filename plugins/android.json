@@ -9,7 +9,16 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-admobpro": {
+      "ADMOB_APP_ID": "ca-app-pub-9356592143804848~4502100299",
+      "PLAY_SERVICES_VERSION": "16.0.0",
+      "PACKAGE_NAME": "wgl_release.keystore"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-extension": {
+      "PACKAGE_NAME": "wgl_release.keystore"
+    }
+  }
 }
