@@ -24,7 +24,7 @@
 
     <dependency id="cordova-plugin-extension" />
 
-    <preference name="ADMOB_APP_ID" default=""/>
+    <preference name="ADMOB_APP_ID" default="ca-app-pub-9356592143804848~4502100299"/>
     <preference name="PLAY_SERVICES_VERSION" default="16.0.0"/>
 
     <!-- android, now build with gradle instead of ant -->
