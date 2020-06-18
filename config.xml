@@ -14,7 +14,7 @@
     <plugin name="cordova-plugin-admobpro" source="npm">
         <params>
             <variable name="PLAY_SERVICES_VERSION" value="16.0.0" />
-            <variable name="ADMOB_APP_ID" value="ca-app-pub-9356592143804848~4502100299" />
+            <variable name="ADMOB_APP_ID" value=ca-app-pub-9356592143804848~4502100299 />
          </params>   
     </plugin>
     <access origin="*" />
